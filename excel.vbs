@@ -27,6 +27,11 @@ Class ExcelBook
         GetLastRow = usedRange.Row + usedRange.Rows.Count - 1
     End Function
 
+    Public Function GetLastColumn(sheetNameOrIndex)
+        Dim usedRange : Set usedRange = obj.Worksheets(sheetNameOrIndex).UsedRange
+        GetLastColumn = usedRange.Column + usedRange.Columns.Count - 1
+    End Function
+
     Public Function Read(sheetNameOrIndex, row, col)
         Read = obj.Worksheets(sheetNameOrIndex).Cells(row, col).Value
     End Function
@@ -35,19 +40,33 @@ Class ExcelBook
         obj.Worksheets(sheetNameOrIndex).Cells(row, col).Value = value
     End Sub
 
-    Public Sub DeleteRows(sheetNameOrIndex, rowFrom, rowTo)
-        obj.Worksheets(sheetNameOrIndex).Rows(rowFrom & ":" & rowTo).Delete
-    End Sub
-
-    Public Function FindRow(sheetNameOrIndex, col, rowStart, text)
+    Public Function FindRow(sheetNameOrIndex, col, rowFrom, rowTo, text)
         text = Trim(CStr(text))
         Dim sheet : Set sheet = obj.Worksheets(sheetNameOrIndex)
-        Dim rowEnd : rowEnd = GetLastRow(sheetNameOrIndex)
+        If rowTo <= 0 Then
+            rowTo = GetLastRow(sheetNameOrIndex)
+        End If
         FindRow = 0
         Dim row
-        For row = rowStart To rowEnd
+        For row = rowFrom To rowTo
             If Trim(CStr(sheet.Cells(row, col).Value)) = text Then
                 FindRow = row
+                Exit For
+            End If
+        Next
+    End Function
+
+    Public Function FindColumn(sheetNameOrIndex, row, colFrom, colTo, text)
+        text = Trim(CStr(text))
+        Dim sheet : Set sheet = obj.Worksheets(sheetNameOrIndex)
+        If colTo <= 0 Then
+            colTo = GetLastColumn(sheetNameOrIndex)
+        End If
+        FindColumn = 0
+        Dim col
+        For col = colFrom To colTo
+            If Trim(CStr(sheet.Cells(row, col).Value)) = text Then
+                FindColumn = col
                 Exit For
             End If
         Next
