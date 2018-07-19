@@ -51,8 +51,9 @@ Class WordDoc
 
     Sub ReplaceAll(findText, replaceWith, _
                    matchCase, matchWholeWord, matchWildcards)
+        Const forward = True
         Find findText, matchCase, matchWholeWord, matchWildcards, _
-                True, wdFindContinue, replaceWith, wdReplaceAll
+                forward, wdFindContinue, replaceWith, wdReplaceAll
     End Sub
 End Class
 
